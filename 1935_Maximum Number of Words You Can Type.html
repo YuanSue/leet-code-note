@@ -276,20 +276,57 @@
       <span class="code-content">
 class Solution:
     def canBeTypedWords(self, text: str, brokenLetters: str) -> int:
+    # 把壞掉的字母放到集合（查找速度快）
         broken_set= set(brokenLetters)
         words= text.split()
         count= 0
 
         for word in words:
+            # 檢查單字是否包含壞掉的字母
             if not any(ch in broken_set for ch in word):
                 count += 1
         return count
           </span>
     </div>
 
+    <h3>Explanation</h3>
+    <code>any(ch in broken_set for ch in word)</code>:<br>
+    <ol>
+        <ul>
+            <li>這是一個 生成式 (generator expression)</li>
+            <li>for ch in word 會逐一取出單字 word 中的每個字母</li>
+            <li>ch in broken_set 會檢查該字母 ch 是否在壞掉的字母集合 broken_set 裡</li>
+        </ul>
+    </ol>
+    <p><span class="blue-text">這個 any(...) 的意思是：</span><br>
+        只要有 <span class="red-text">任意一個</span> 字母 ch 在 broken_set 裡，就回傳 True如果都沒有壞掉字母，才回傳 False</p>
 
+        <a href="https://chatgpt.com/share/68c8becc-a880-8002-b3a8-c5ebe8a835e2">解釋any() 的用法</a>
 
+    <h3>Big-O</h3>
+    &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
+      <button class="copy-button" onclick="copyCode(this)">複製</button>
+      <span class="code-content">
+broken_set = set(brokenLetters)   # O(m)，m = brokenLetters 長度
+words = text.split()              # O(n)，n = text 長度
 
+for word in words:                # 假設有 k 個單字
+    if not any(ch in broken_set for ch in word):
+        count += 1
+        </span>
+        </div>
+
+        <ol>
+            <ul>
+                <li>broken_set 是 set，查找 ch in broken_set 是 O(1) 平均時間</li>
+                <li>外層迴圈跑所有單字，內層 any(...) 會檢查單字的每個字母</li>
+                <li>最壞情況要檢查 text 裡所有字母一次</li>
+            </ul>
+        </ol>
+
+        <h4>所以總時間複雜度是: <span>O(n+m)</span>（其實就是 text 所有字母總數 + brokenLetters 長度）<br>
+        這已經是線性時間，也就是最優能做到的複雜度，因為你至少要看過一次所有字母才能決定單字能不能打出來。</h4>
+        
     <script>
         function copyCode(button) {
           // 找到按鈕所在的程式碼區塊
