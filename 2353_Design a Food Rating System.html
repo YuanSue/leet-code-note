@@ -223,109 +223,161 @@
     </div>
   </div>
 
-  <h1><a href="index.html"> Maximum Number of Words You Can Type</a></h1>
+  <h1><a href="index.html"> Design a Food Rating System</a></h1>
   <h2 id="section1">Question</h2>
-  <p>There is a malfunctioning keyboard where some letter keys do not work. All other keys on the keyboard work properly.<br>
-    Given a string text of words separated by a single space (no leading or trailing spaces) and a string brokenLetters of all distinct letter keys that are broken, 
-    return the number of words in text you can fully type using this keyboard.</p>
-    <ol>
-        題意:
-        <ul>
-            <li>有一個鍵盤，其中有一些英文字母壞掉了（brokenLetters）。</li>
-        
-            <li>text 是一個句子，由多個單字組成，單字之間只有一個空格。</li>
+  <p>Design a food rating system that can do the following:<br>
+    # Modify the rating of a food item listed in the system.<br>
+    # Return the highest-rated food item for a type of cuisine in the system.<br>
+    Implement the FoodRatings class:<br>
 
-            <li>你要計算有幾個單字可以完全輸入（這個單字不包含任何壞掉的字母）。</li>
+    # FoodRatings(String[] foods, String[] cuisines, int[] ratings) Initializes the system. The food items are described by foods, cuisines and ratings, all of which have a length of n.<br>
+    # foods[i] is the name of the ith food,<br>
+    # cuisines[i] is the type of cuisine of the ith food, and<br>
+    # ratings[i] is the initial rating of the ith food.<br>
+    # void changeRating(String food, int newRating) Changes the rating of the food item with the name food.<br>
+    # String highestRated(String cuisine) Returns the name of the food item that has the highest rating for the given type of cuisine. If there is a tie, return the item with the lexicographically smaller name.<br>
+    # Note that a string x is lexicographically smaller than string y if x comes before y in dictionary order, that is, either x is a prefix of y, or if i is the first position such that x[i] != y[i], then x[i] comes before y[i] in alphabetic order.<br>
+
+    </p>
+    <ol>
+      Example 1:
+      <ul>
+      <li>Input</li>
+      ["FoodRatings", "highestRated", "highestRated", "changeRating", "highestRated", "changeRating", "highestRated"]<br>
+      [[["kimchi", "miso", "sushi", "moussaka", "ramen", "bulgogi"], ["korean", "japanese", "japanese", "greek", "japanese", "korean"], [9, 12, 8, 15, 14, 7]], ["korean"], ["japanese"], ["sushi", 16], ["japanese"], ["ramen", 16], ["japanese"]]
+      <li>Output</li>
+      [null, "kimchi", "ramen", null, "sushi", null, "ramen"]
+
+      <li>Explanation</li>
+      FoodRatings foodRatings = new FoodRatings(["kimchi", "miso", "sushi", "moussaka", "ramen", "bulgogi"], ["korean", "japanese", "japanese", "greek", "japanese", "korean"], [9, 12, 8, 15, 14, 7]);<br>
+      foodRatings.highestRated("korean"); // return "kimchi"<br>
+                                          // "kimchi" is the highest rated korean food with a rating of 9.<br>
+      foodRatings.highestRated("japanese"); // return "ramen"<br>
+                                            // "ramen" is the highest rated japanese food with a rating of 14.<br>
+      foodRatings.changeRating("sushi", 16); // "sushi" now has a rating of 16.<br>
+      foodRatings.highestRated("japanese"); // return "sushi"<br>
+                                            // "sushi" is the highest rated japanese food with a rating of 16.<br>
+      foodRatings.changeRating("ramen", 16); // "ramen" now has a rating of 16.<br>
+      foodRatings.highestRated("japanese"); // return "ramen"<br>
+                                            // Both "sushi" and "ramen" have a rating of 16.<br>
+                                            // However, "ramen" is lexicographically smaller than "sushi".<br>
+      </ul>
+    </ol>
+
+    <ol>
+        題意 -> 要設計一個類別 FoodRatings，可以做到：
+        <ul>
+            <li>初始化系統：有食物名稱 foods、該食物屬於的菜系 cuisines、以及食物的評分 ratings。</li>
+        
+            <li>修改評分：根據食物名稱去修改該食物的評分。</li>
+
+            <li>查詢最高評分：根據菜系，找出評分最高的那道菜名（若有同分，就回傳字典順序最小的名字）。</li>
         </ul>
     </ol>
 
-    <ol>
-        <li>Example 1:</li>
-        Input: text = "hello world", brokenLetters = "ad"
-        Output: 1
-        Explanation: We cannot type "world" because the 'd' key is broken.
-
-        <li>Example 2:</li>
-        Input: text = "leet code", brokenLetters = "lt"
-        Output: 1
-        Explanation: We cannot type "leet" because the 'l' and 't' keys are broken.
-
-        <li>Example 3:</li>
-        Input: text = "leet code", brokenLetters = "e"
-        Output: 0
-        Explanation: We cannot type either word because the 'e' key is broken.
-    </ol>
+    
   <h2 id="section2">Tips</h2>
   <ol>
       步驟思路:
-      <li>把 text 用空格切開 → 得到一個個單字。</li>
+      <li>用一個 map1：food -> (cuisine, rating)</li>
       
-      <li>針對每個單字，檢查它的每個字母是否在 brokenLetters 裡：</li>
+      <li>用一個 map2：cuisine -> (sorted data structure of foods)</li>
       <ul>
-        <li>如果有任何一個壞掉的字母 → 這個單字不能輸入。</li>
+        <li>裡面按「評分降序+名稱升序」排序</li>
 
-        <li>如果完全沒有壞掉的字母 → 這個單字可以輸入。</li>
+        <li>Python可用 heapq / sortedcontainers；Java可用 TreeSet。</li>
       </ul>
 
-        <li>最後把可以輸入的單字數量回傳。</li>
+        <li>查詢最高分就直接取排序結構的第一個；改評分時就移除舊資料再插入新資料。</li>
+  </ol>
+
+    <ol>
+      實作重點:
+      <ul>
+        <li>food_info：紀錄每個食物對應的 (cuisine, rating)</li>
+
+        <li>cuisine_map：每種 cuisine 對應一個 heap，裡面存 (-rating, name)（負號是因為 Python heapq 是最小堆，要反轉才能當最大堆）。</li>
+        
+        <li>查詢時直接回傳堆頂，但要注意 rating 更新後舊資料仍會在堆裡 → 用 lazy deletion 概念檢查當前 heap 頂端的值是否和 food_info 相符，不符就 pop 掉。</li>
+      </ul>
+
   </ol>
 
   <h2 id="section3">Answer</h2>
   &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
       <button class="copy-button" onclick="copyCode(this)">複製</button>
       <span class="code-content">
-class Solution:
-    def canBeTypedWords(self, text: str, brokenLetters: str) -> int:
-    # 把壞掉的字母放到集合（查找速度快）
-        broken_set= set(brokenLetters)
-        words= text.split()
-        count= 0
+import heapq
+from typing import List
 
-        for word in words:
-            # 檢查單字是否包含壞掉的字母
-            if not any(ch in broken_set for ch in word):
-                count += 1
-        return count
+class FoodRatings:
+
+    def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):
+        # 紀錄 food -> (cuisine, rating)
+        self.food_info = {}
+        # 紀錄 cuisine -> heap[(-rating, name)]
+        self.cuisine_map = {}
+
+        for f, c, r in zip(foods, cuisines, ratings):
+            self.food_info[f] = (c, r)
+            if c not in self.cuisine_map:
+                self.cuisine_map[c] = []
+            heapq.heappush(self.cuisine_map[c], (-r, f))  # 最大評分優先，字典序自動排序
+
+    def changeRating(self, food: str, newRating: int) -> None:
+        # 更新 food 的 rating
+        cuisine, _ = self.food_info[food]
+        self.food_info[food] = (cuisine, newRating)
+        # 推入新資料到 heap（舊的還在裡面，但稍後會 lazy pop）
+        heapq.heappush(self.cuisine_map[cuisine], (-newRating, food))
+
+    def highestRated(self, cuisine: str) -> str:
+        heap = self.cuisine_map[cuisine]
+        # lazy deletion：確認堆頂是否是最新 rating
+        while heap:
+            rating, name = heap[0]
+            current_rating = self.food_info[name][1]
+            if -rating == current_rating:
+                return name
+            else:
+                heapq.heappop(heap)  # 移除過期資料
+        return ""  # 如果找不到（理論上不會發生）
+
+          </span>
+    </div>
+
+    <h3>執行範例</h3>
+    &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
+      <button class="copy-button" onclick="copyCode(this)">複製</button>
+      <span class="code-content">
+foods = ["kimchi", "miso", "sushi", "moussaka", "ramen", "bulgogi"]
+cuisines = ["korean", "japanese", "japanese", "greek", "japanese", "korean"]
+ratings = [9, 12, 8, 15, 14, 7]
+
+foodRatings = FoodRatings(foods, cuisines, ratings)
+print(foodRatings.highestRated("korean"))    # kimchi
+print(foodRatings.highestRated("japanese"))  # ramen
+foodRatings.changeRating("sushi", 16)
+print(foodRatings.highestRated("japanese"))  # sushi
+foodRatings.changeRating("ramen", 16)
+print(foodRatings.highestRated("japanese"))  # ramen
+
+#輸出:
+#kimchi
+#ramen
+#sushi
+#ramen
+
           </span>
     </div>
 
     <h3>Explanation</h3>
-    <code>any(ch in broken_set for ch in word)</code>:<br>
-    <ol>
-        <ul>
-            <li>這是一個 生成式 (generator expression)</li>
-            <li>for ch in word 會逐一取出單字 word 中的每個字母</li>
-            <li>ch in broken_set 會檢查該字母 ch 是否在壞掉的字母集合 broken_set 裡</li>
-        </ul>
-    </ol>
-    <p><span class="blue-text">這個 any(...) 的意思是：</span><br>
-        只要有 <span class="red-text">任意一個</span> 字母 ch 在 broken_set 裡，就回傳 True如果都沒有壞掉字母，才回傳 False</p>
+    
+    <a href="https://chatgpt.com/share/68cb7489-0230-8002-aa4e-aaa49a989586">解釋zip() 的用法</a>
 
-        <a href="https://chatgpt.com/share/68c8becc-a880-8002-b3a8-c5ebe8a835e2">解釋any() 的用法</a>
-
-    <h3>Big-O</h3>
-    &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
-      <button class="copy-button" onclick="copyCode(this)">複製</button>
-      <span class="code-content">
-broken_set = set(brokenLetters)   # O(m)，m = brokenLetters 長度
-words = text.split()              # O(n)，n = text 長度
-
-for word in words:                # 假設有 k 個單字
-    if not any(ch in broken_set for ch in word):
-        count += 1
-        </span>
-        </div>
-
-        <ol>
-            <ul>
-                <li>broken_set 是 set，查找 ch in broken_set 是 O(1) 平均時間</li>
-                <li>外層迴圈跑所有單字，內層 any(...) 會檢查單字的每個字母</li>
-                <li>最壞情況要檢查 text 裡所有字母一次</li>
-            </ul>
-        </ol>
-
-        <h4>所以總時間複雜度是: <span>O(n+m)</span>（其實就是 text 所有字母總數 + brokenLetters 長度）<br>
-        這已經是線性時間，也就是最優能做到的複雜度，因為你至少要看過一次所有字母才能決定單字能不能打出來。</h4>
+    <img src="img/2353_1.png" alt="無法顯示" width="500" class="center-img">
+    <h4>區別：<br>
+    如果在方法裡只用 局部變數（沒有 self.），那個變數只在該方法內有效，用完就消失。用 self.xxx 建立的就是 實例屬性，整個物件存活期間都可以被其他方法讀寫。</h4>
         
     <script>
         function copyCode(button) {
