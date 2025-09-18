@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>Leet code note</title>
+  
+  <!-- 字型與樣式 -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      margin: 30px;
+      color: #222;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    h2 {
+      font-weight: 700;
+      font-size: 1.5em;
+      color: #975;
+      margin-top: 40px;
+    }
+
+    .under{
+      text-decoration: underline;
+      text-decoration-color: black;
+    }
+
+    .red-text {
+      font-weight: bold;
+      text-decoration-thickness: 2px;
+      color: red;
+    }
+
+    .blue-text {
+      font-weight: bold;
+      text-decoration-thickness: 2px;
+      color: rgb(105, 135, 190);
+    }
+
+    /* 表格樣式 */
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      text-align: center;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+    }
+
+    th {
+      background-color: #f5f5f5;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    code {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: #f2f2f2;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+
+    /* 程式碼框選格式 */
+    .code-block {
+      position: relative;
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 1rem;
+      border-radius: 10px;
+      border: 3px solid #000000;
+      font-family: 'Courier New', monospace;
+      line-height: 1.5;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .copy-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .copy-button:hover {
+      background-color: #45a049;
+    }
+
+    /* 索引面板樣式 */
+    .index-panel {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .index-toggle {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      font-size: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .index-toggle:hover {
+      background-color: #0056b3;
+      transform: scale(1.1);
+    }
+
+    .index-menu {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background: white;
+      border: 2px solid #007bff;
+      border-radius: 10px;
+      padding: 15px;
+      min-width: 250px;
+      max-height: 400px;
+      overflow-y: auto;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      display: none;
+    }
+
+    .index-menu.show {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .index-item {
+      display: block;
+      text-decoration: none;
+      color: #333;
+      padding: 8px 12px;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      transition: background-color 0.2s ease;
+    }
+
+    .index-item:hover {
+      background-color: #f0f8ff;
+      color: #007bff;
+    }
+
+    .index-title {
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 10px;
+      text-align: center;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 8px;
+    }
+
+    /*圖片置中*/
+    .center-img {
+    display: block;
+    margin: 0 auto;
+  }
+  /*樹狀圖調整樣式*/
+  .tree-block {
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      background-color: #f9f9f9;
+      color: #333;
+      border-left: 4px solid #4e73df;
+      padding: 12px 16px;
+      margin: 16px 0;
+      white-space: pre;
+      line-height: 1.6;
+      tab-size: 4; /* 支援 tab 縮排 */
+    }
+
+    .tree-block .blue-text {
+      color: #007acc;
+      font-weight: bold;
+    }
+
+    .tree-block .gray-text {
+      color: #888;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- 索引面板 -->
+  <div class="index-panel">
+    <button class="index-toggle" onclick="toggleIndex()">🔍</button>
+    <div class="index-menu" id="indexMenu">
+      <div class="index-title">頁面索引</div>
+      <a href="#section1" class="index-item">Question</a>
+      <a href="#section2" class="index-item">Tips</a>
+      <a href="#section3" class="index-item">Answer</a>
+    </div>
+  </div>
+
+  <h1><a href="index.html"> Design Task Manager</a></h1>
+  <h2 id="section1">Question</h2>
+  <p>There is a task management system that allows users to manage their tasks, each associated with a priority. The system should efficiently handle adding, modifying, executing, and removing tasks.
+    Implement the TaskManager class:<br>
+
+    # TaskManager(...) initializes the task manager with a list of user-task-priority triples. Each element in the input list is of the form [userId, taskId, priority], which adds a task to the specified user with the given priority.<br>
+    # void add(int userId, int taskId, int priority) adds a task with the specified taskId and priority to the user with userId. It is guaranteed that taskId does not exist in the system.<br>
+    # void edit(int taskId, int newPriority) updates the priority of the existing taskId to newPriority. It is guaranteed that taskId exists in the system.<br>
+    # void rmv(int taskId) removes the task identified by taskId from the system. It is guaranteed that taskId exists in the system.<br>
+    # int execTop() executes the task with the highest priority across all users. If there are multiple tasks with the same highest priority, execute the one with the highest taskId. After executing, the taskId is removed from the system. Return the userId associated with the executed task. If no tasks are available, return -1.<br>
+    # Note that a user may be assigned multiple tasks.
+    
+
+    </p>
+    <ol>
+      Example 1:
+      <ul>
+      <li>Input</li>
+        ["TaskManager", "add", "edit", "execTop", "rmv", "add", "execTop"]
+        [[[[1, 101, 10], [2, 102, 20], [3, 103, 15]]], [4, 104, 5], [102, 8], [], [101], [5, 105, 15], []]
+      <li>Output</li>
+      [null, null, null, 3, null, null, 5]
+
+      <li>Explanation</li>
+      TaskManager taskManager = new TaskManager([[1, 101, 10], [2, 102, 20], [3, 103, 15]]); // Initializes with three tasks for Users 1, 2, and 3.
+      taskManager.add(4, 104, 5); // Adds task 104 with priority 5 for User 4.
+      taskManager.edit(102, 8); // Updates priority of task 102 to 8.
+      taskManager.execTop(); // return 3. Executes task 103 for User 3.
+      taskManager.rmv(101); // Removes task 101 from the system.
+      taskManager.add(5, 105, 15); // Adds task 105 with priority 15 for User 5.
+      taskManager.execTop(); // return 5. Executes task 105 for User 5.
+      </ul>
+    </ol>
+
+    <ol>
+        題意 -> 有一個任務管理系統，能夠管理使用者的任務，每個任務都有一個「優先順序 (priority)」。
+        這個系統需要提供幾個操作：
+        <ul>
+            <li>新增任務</li>
+        
+            <li>修改任務優先順序</li>
+
+            <li>刪除任務</li>
+            
+            <li>執行優先順序最高的任務</li>
+        </ul>
+    </ol>
+
+    
+    
+  <h2 id="section2">Tips</h2>
+  <ol>
+        重點：
+        <ul>
+            <li>任務是由 (userId, taskId, priority) 定義。</li>
+        
+            <li>任務可以屬於不同的使用者。</li>
+
+            <li>刪除任務</li>
+            
+            <li>優先順序高的任務要先執行，若同優先順序則選擇 taskId 較大的任務。</li>
+        </ul>
+    </ol>
+  <img src="img/3408_1.png" alt="無法顯示" width="1000" class="center-img">
+  <img src="img/3408_2.png" alt="無法顯示" width="1000" class="center-img">
+  <img src="img/3408_3.png" alt="無法顯示" width="1000" class="center-img">
+  <img src="img/3408_4.png" alt="無法顯示" width="1000" class="center-img">
+
+  <h2 id="section3">Answer</h2>
+  &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
+      <button class="copy-button" onclick="copyCode(this)">複製</button>
+      <span class="code-content">
+import heapq
+from typing import List
+
+class TaskManager:
+
+    def __init__(self, tasks: List[List[int]]):
+        # taskId -> (userId, priority)
+        self.task_map = {}
+        # 大根堆，用 (-priority, -taskId, taskId) 方便取最大
+        self.max_heap = []
+        for userId, taskId, priority in tasks:
+            self.task_map[taskId] = (userId, priority)
+            heapq.heappush(self.max_heap, (-priority, -taskId, taskId))
+
+    def add(self, userId: int, taskId: int, priority: int) -> None:
+        self.task_map[taskId] = (userId, priority)
+        heapq.heappush(self.max_heap, (-priority, -taskId, taskId))
+
+    def edit(self, taskId: int, newPriority: int) -> None:
+        # 更新字典即可，heap 懶刪除
+        userId, _ = self.task_map[taskId]
+        self.task_map[taskId] = (userId, newPriority)
+        heapq.heappush(self.max_heap, (-newPriority, -taskId, taskId))
+
+    def rmv(self, taskId: int) -> None:
+        # 從字典移除即可，heap 用懶刪除
+        if taskId in self.task_map:
+            del self.task_map[taskId]
+
+    def execTop(self) -> int:
+        # 彈出堆頂，檢查是不是有效的
+        while self.max_heap:
+            neg_priority, neg_taskId, taskId = heapq.heappop(self.max_heap)
+            if taskId in self.task_map:
+                userId, priority = self.task_map[taskId]
+                # 檢查 priority 是否仍正確（可能 edit 過）
+                if priority == -neg_priority:
+                    del self.task_map[taskId]  # 執行後刪除
+                    return userId
+                # 否則是舊資料，繼續pop
+        return -1
+          </span>
+    </div>
+
+    <h3>執行範例</h3>
+    &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
+      <button class="copy-button" onclick="copyCode(this)">複製</button>
+      <span class="code-content">
+tm = TaskManager([[1, 101, 10], [2, 102, 20], [3, 103, 15]])
+tm.add(4, 104, 5)
+tm.edit(102, 8)
+print(tm.execTop())  # 3 (執行103)
+tm.rmv(101)
+tm.add(5, 105, 15)
+print(tm.execTop())  # 5 (執行105)
+
+
+#輸出:
+#3
+#5
+
+
+          </span>
+    </div>
+
+    <h3>Explanation</h3>
+    
+    <a href="https://chatgpt.com/share/68cbd62e-2708-8002-a75f-99ef053fe8f1">解釋del的使用時機</a>
+
+    <script>
+        function copyCode(button) {
+          // 找到按鈕所在的程式碼區塊
+          const codeBlock = button.parentElement;
+          // 找到程式碼內容元素
+          const codeContent = codeBlock.querySelector('.code-content');
+
+          if (codeContent) {
+            navigator.clipboard.writeText(codeContent.textContent).then(() => {
+              alert("已複製 SQL 程式碼！");
+            });
+          }
+        }
+
+        function toggleIndex() {
+          const indexMenu = document.getElementById('indexMenu');
+          indexMenu.classList.toggle('show');
+        }
+
+        // 點擊其他地方時關閉索引面板
+        document.addEventListener('click', function(event) {
+          const indexPanel = document.querySelector('.index-panel');
+          const indexMenu = document.getElementById('indexMenu');
+
+          if (!indexPanel.contains(event.target)) {
+            indexMenu.classList.remove('show');
+          }
+        });
+
+        // 點擊索引項目後關閉面板並平滑滾動
+        document.querySelectorAll('.index-item').forEach(item => {
+          item.addEventListener('click', function(event) {
+            event.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+              targetElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+
+            // 關閉索引面板
+            document.getElementById('indexMenu').classList.remove('show');
+          });
+        });
+
+        // 對所有 <code> 元素監聽右鍵
+        document.querySelectorAll('code').forEach(el => {
+          el.addEventListener('contextmenu', function (event) {
+            event.preventDefault();// 阻止預設右鍵選單
+            const codeText = this.innerText.trim();
+            navigator.clipboard.writeText(codeText)
+              .catch(err => console.error('複製失敗', err));
+          });
+        });
+    </script>
+
+    <a href="index.html">← 回首頁</a>
+</body>
+</html>
