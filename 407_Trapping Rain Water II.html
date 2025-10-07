@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>Leet code note</title>
+  
+  <!-- 字型與樣式 -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      margin: 30px;
+      color: #222;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    h2 {
+      font-weight: 700;
+      font-size: 1.5em;
+      color: #975;
+      margin-top: 40px;
+    }
+
+    .under{
+      text-decoration: underline;
+      text-decoration-color: black;
+    }
+
+    .red-text {
+      font-weight: bold;
+      text-decoration-thickness: 2px;
+      color: red;
+    }
+
+    .blue-text {
+      font-weight: bold;
+      text-decoration-thickness: 2px;
+      color: rgb(105, 135, 190);
+    }
+
+    /* 表格樣式 */
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      text-align: center;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+    }
+
+    th {
+      background-color: #f5f5f5;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    code {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: #f2f2f2;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+
+    /* 程式碼框選格式 */
+    .code-block {
+      position: relative;
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 1rem;
+      border-radius: 10px;
+      border: 3px solid #000000;
+      font-family: 'Courier New', monospace;
+      line-height: 1.5;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .copy-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .copy-button:hover {
+      background-color: #45a049;
+    }
+
+    /* 索引面板樣式 */
+    .index-panel {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .index-toggle {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      font-size: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .index-toggle:hover {
+      background-color: #0056b3;
+      transform: scale(1.1);
+    }
+
+    .index-menu {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background: white;
+      border: 2px solid #007bff;
+      border-radius: 10px;
+      padding: 15px;
+      min-width: 250px;
+      max-height: 400px;
+      overflow-y: auto;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      display: none;
+    }
+
+    .index-menu.show {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .index-item {
+      display: block;
+      text-decoration: none;
+      color: #333;
+      padding: 8px 12px;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      transition: background-color 0.2s ease;
+    }
+
+    .index-item:hover {
+      background-color: #f0f8ff;
+      color: #007bff;
+    }
+
+    .index-title {
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 10px;
+      text-align: center;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 8px;
+    }
+
+    /*圖片置中*/
+    .center-img {
+    display: block;
+    margin: 0 auto;
+  }
+  /*樹狀圖調整樣式*/
+  .tree-block {
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      background-color: #f9f9f9;
+      color: #333;
+      border-left: 4px solid #4e73df;
+      padding: 12px 16px;
+      margin: 16px 0;
+      white-space: pre;
+      line-height: 1.6;
+      tab-size: 4; /* 支援 tab 縮排 */
+    }
+
+    .tree-block .blue-text {
+      color: #007acc;
+      font-weight: bold;
+    }
+
+    .tree-block .gray-text {
+      color: #888;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- 索引面板 -->
+  <div class="index-panel">
+    <button class="index-toggle" onclick="toggleIndex()">🔍</button>
+    <div class="index-menu" id="indexMenu">
+      <div class="index-title">頁面索引</div>
+      <a href="#section1" class="index-item">Question</a>
+      <a href="#section2" class="index-item">Tips</a>
+      <a href="#section3" class="index-item">Answer</a>
+    </div>
+  </div>
+
+  <h1><a href="index.html"> Trapping Rain Water II</a></h1>
+  <h2 id="section1">Question</h2>
+  <p>Given an m x n integer matrix heightMap representing the height of each unit cell in a 2D elevation map, return the volume of water it can trap after raining.
+    </p>
+
+  <img src="img/407_1.png" alt="無法顯示" width="1000" class="center-img">
+  <img src="img/407_2.png" alt="無法顯示" width="1000" class="center-img">
+
+    <ol>
+        題意:
+        <ul>
+            <li>水能存的高度，取決於「周圍最小的邊界高度」。</li>
+        
+            <li>所以解法不是暴力，而是要用 最小堆 (Min-Heap / Priority Queue) + BFS/DFS擴散 來模擬水往裡流。</li>
+        </ul>
+    </ol>
+
+  <h2 id="section2">Tips</h2>
+  <ol>
+        重點：
+        <li>邊界先入堆</li>
+            <ul>
+                <li>水一定會從邊界流走，所以邊界的格子不能蓄水。</li>
+            
+                <li>我們把邊界所有格子的高度丟進一個 min-heap，並標記為訪問過。</li>
+            </ul>
+        <li>逐步擴散</li>
+            <ul>
+                <li>每次從 heap 中彈出高度最低的格子 (cur)。</li>
+                
+                <li>看它的鄰居 (上下左右)：</li>
+                    <ul>
+                        <li>如果沒訪問過，水能蓄多少？</li>
+                            <ul>
+                                <li>water = max(0, cur.height - neighbor.height)</li> 
+                                <li>因為如果鄰居比 cur 矮，水會補到 cur 的高度。</li>
+                            </ul>
+                        
+                        <li>然後把鄰居推進 heap，但高度要取：</li>
+                            <ul>
+                                <li>newHeight = max(neighbor.height, cur.height)</li> 
+                                <li>意思是，若鄰居比較矮，水會把它填高。</li>
+                            </ul>
+                    </ul>
+            </ul>
+        <li>累加水量</li>
+            <ul>
+                <li>每次遇到 neighbor.height < cur.height 的情況就加上蓄水量。</li>
+            </ul>
+
+    </ol>
+  <h2 id="section3">Answer</h2>
+  &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
+      <button class="copy-button" onclick="copyCode(this)">複製</button>
+      <span class="code-content">
+import heapq
+
+class Solution:
+    def trapRainWater(self, heightMap):
+        if not heightMap or not heightMap[0]:
+            return 0
+
+        m, n = len(heightMap), len(heightMap[0])
+        visited = [[False]*n for _ in range(m)]
+        heap = []
+
+        # 將邊界丟進最小堆
+        for i in range(m):
+            for j in [0, n-1]:
+                heapq.heappush(heap, (heightMap[i][j], i, j))
+                visited[i][j] = True
+        for j in range(n):
+            for i in [0, m-1]:
+                if not visited[i][j]:
+                    heapq.heappush(heap, (heightMap[i][j], i, j))
+                    visited[i][j] = True
+
+        res = 0
+        dirs = [(1,0), (-1,0), (0,1), (0,-1)]
+
+        while heap:
+            h, x, y = heapq.heappop(heap)
+            for dx, dy in dirs:
+                nx, ny = x+dx, y+dy
+                if 0 <= nx < m and 0 <= ny < n and not visited[nx][ny]:
+                    visited[nx][ny] = True
+                    nh = heightMap[nx][ny]
+                    # 如果比當前高度低，能積水
+                    if nh < h:
+                        res += h - nh
+                    # 更新高度
+                    heapq.heappush(heap, (max(h, nh), nx, ny))
+
+        return res
+
+          </span>
+    </div>
+
+    <h3>Explanation</h3>
+
+    <a href="https://chatgpt.com/share/68e4bed8-3ef0-8002-b376-992448e64451">解釋題意</a><br>
+
+    <script>
+        function copyCode(button) {
+          // 找到按鈕所在的程式碼區塊
+          const codeBlock = button.parentElement;
+          // 找到程式碼內容元素
+          const codeContent = codeBlock.querySelector('.code-content');
+
+          if (codeContent) {
+            navigator.clipboard.writeText(codeContent.textContent).then(() => {
+              alert("已複製 SQL 程式碼！");
+            });
+          }
+        }
+
+        function toggleIndex() {
+          const indexMenu = document.getElementById('indexMenu');
+          indexMenu.classList.toggle('show');
+        }
+
+        // 點擊其他地方時關閉索引面板
+        document.addEventListener('click', function(event) {
+          const indexPanel = document.querySelector('.index-panel');
+          const indexMenu = document.getElementById('indexMenu');
+
+          if (!indexPanel.contains(event.target)) {
+            indexMenu.classList.remove('show');
+          }
+        });
+
+        // 點擊索引項目後關閉面板並平滑滾動
+        document.querySelectorAll('.index-item').forEach(item => {
+          item.addEventListener('click', function(event) {
+            event.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+              targetElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+
+            // 關閉索引面板
+            document.getElementById('indexMenu').classList.remove('show');
+          });
+        });
+
+        // 對所有 <code> 元素監聽右鍵
+        document.querySelectorAll('code').forEach(el => {
+          el.addEventListener('contextmenu', function (event) {
+            event.preventDefault();// 阻止預設右鍵選單
+            const codeText = this.innerText.trim();
+            navigator.clipboard.writeText(codeText)
+              .catch(err => console.error('複製失敗', err));
+          });
+        });
+    </script>
+
+    <a href="index.html">← 回首頁</a>
+</body>
+</html>
