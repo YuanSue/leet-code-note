@@ -223,26 +223,67 @@
     </div>
   </div>
 
-  <h1><a href="index.html"> Water Bottles II</a></h1>
+  <h1><a href="index.html"> Avoid Flood in The City</a></h1>
   <h2 id="section1">Question</h2>
-  <p>You are given two integers numBottles and numExchange.<br>
-    "numBottles" represents the number of full water bottles that you initially have. In one operation, you can perform one of the following operations:<br>
-    Drink any number of full water bottles turning them into empty bottles.<br>
-    Exchange "numExchange" empty bottles with one full water bottle. Then, increase numExchange by one.<br>
-    Note that you cannot exchange multiple batches of empty bottles for the same value of numExchange. For example, if numBottles == 3 and numExchange == 1, you cannot exchange 3 empty water bottles for 3 full bottles.<br>
-    Return the maximum number of water bottles you can drink.
+  <p>Your country has an infinite number of lakes. Initially, all the lakes are empty, but when it rains over the nth lake, the nth lake becomes full of water. <br>
+    If it rains over a lake that is full of water, there will be a flood. <br>
+    Your goal is to avoid floods in any lake.
     </p>
 
-    <img src="img/3100_1.png" alt="無法顯示" width="1000" class="center-img">
-    <img src="img/3100_2.png" alt="無法顯示" width="1000" class="center-img">
+    <ol>
+        Given an integer array rains where:
+        <ul>
+            <li>rains[i] > 0 means there will be rains over the rains[i] lake.</li>
+            
+            <li>rains[i] == 0 means there are no rains this day and you can choose one lake this day and dry it.</li>
+            Return an array ans where:
+            <li>ans.length == rains.length</li>
+            <li>ans[i] == -1 if rains[i] > 0.</li>
+            <li>ans[i] is the lake you choose to dry in the ith day if rains[i] == 0.</li>
+            If there are multiple valid answers return any of them. If it is impossible to avoid flood return an empty array.
+            Notice that if you chose to dry a full lake, it becomes empty, but if you chose to dry an empty lake, nothing changes.
+        </ul>
+    </ol>
 
     <ol>
-        題意 -> 你一開始有 numBottles 個「滿水瓶」。每次操作可以做兩件事：
+        <li>Example 1:</li>
+        Input: rains = [1,2,3,4]
+        Output: [-1,-1,-1,-1]
+        Explanation: After the first day full lakes are [1]
+        After the second day full lakes are [1,2]
+        After the third day full lakes are [1,2,3]
+        After the fourth day full lakes are [1,2,3,4]
+        There's no day to dry any lake and there is no flood in any lake.
+
+        <li>Example 2:</li>
+        Input: rains = [1,2,0,0,2,1]
+        Output: [-1,-1,2,1,-1,-1]
+        Explanation: After the first day full lakes are [1]
+        After the second day full lakes are [1,2]
+        After the third day, we dry lake 2. Full lakes are [1]
+        After the fourth day, we dry lake 1. There is no full lakes.
+        After the fifth day, full lakes are [2].
+        After the sixth day, full lakes are [1,2].
+        It is easy that this scenario is flood-free. [-1,-1,1,2,-1,-1] is another acceptable scenario.
+
+        <li>Example 3:</li>
+        Input: rains = [1,2,0,1,2]
+        Output: []
+        Explanation: After the second day, full lakes are  [1,2]. We have to dry one lake in the third day.
+        After that, it will rain over lakes [1,2]. It's easy to prove that no matter which lake you choose to dry in the 3rd day, the other one will flood.
+
+    </ol>
+
+    <ol>
+        題意 -> 你有無限多個湖泊，一開始全部都是空的。
         <ul>
-            <li>喝掉一瓶滿水 → 變成一個空瓶。</li>
+            陣列 rains 表示每天的天氣情況：
+            <li>rains[i] > 0：表示當天會下雨在第 rains[i] 號湖泊上 → 這個湖會被填滿。</li>
         
-            <li>用 numExchange 個空瓶去換一瓶新的滿水瓶，但是換完後 numExchange 的需求會 +1（下一次要更多空瓶才能換）。</li>
-                目標：算出最多能喝多少瓶水。
+            <li>rains[i] == 0：表示當天不下雨，你可以選擇**乾燥（排空）**任意一個湖。</li>
+            洪水條件
+            <li>如果某一天，下雨的湖泊已經是滿的，那天就會發生洪水（flood）。
+            目標是安排在那些「不下雨」的日子中，乾燥適當的湖泊，以避免任何洪水發生。</li>
         </ul>
     </ol>
 
@@ -250,19 +291,17 @@
   <ol>
         重點：
         <ul>
-            <li>用模擬的方式即可：</li>
+            <li>記錄每個湖上次下雨的日子。</li>
         
-            <li>記錄總共喝掉的瓶數。</li>
+            <li>在遇到晴天 (0) 時，選擇乾燥未來最早會再下雨的湖，這樣能最大化避免未來洪水。</li>
 
-            <li>每次先喝光所有的滿水瓶 → 累加數量。</li>
+            <li>用資料結構：</li>
             
-            <li>用空瓶去檢查能不能換新瓶：</li>
+            <li>full：集合，記錄目前已滿的湖。</li>
             
-            <li>如果 empty >= numExchange，就能換，空瓶數 -= numExchange，滿水瓶數 += 1，並且 numExchange += 1。</li>
+            <li>nextRain：記錄每個湖下一次下雨的日子。</li>
             
-            <li>重複直到不能換。</li>
-            
-            <li>回傳總數。</li>
+            <li>dryDays：優先隊列 (min-heap)，選擇哪天乾哪個湖。</li>
 
         </ul>
     </ol>
@@ -270,21 +309,48 @@
   &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
       <button class="copy-button" onclick="copyCode(this)">複製</button>
       <span class="code-content">
+import heapq
+
 class Solution:
-    def maxBottlesDrunk(self, numBottles: int, numExchange: int) -> int:
-        drank = numBottles
-        empty = numBottles
-        n_bol = 0
+    def avoidFlood(self, rains):
+        n = len(rains)
+        ans = [-1] * n        # 預設所有天都是 -1（下雨天）
+        full = set()          # 目前滿水的湖
+        nextRain = {}         # 每個湖下一次下雨的索引
+        heap = []             # 優先隊列 (按照下次下雨的天數排序)
 
-        while empty >= numExchange:
-            empty = empty - numExchange
-            n_bol +=1
-            numExchange += 1
-            empty += 1
-        drank += n_bol
+        # 預先記錄每個湖所有下雨日的列表
+        from collections import defaultdict
+        future = defaultdict(list)
+        for day, lake in enumerate(rains):
+            if lake > 0:
+                future[lake].append(day)
 
-        return drank
+        for day, lake in enumerate(rains):
+            if lake > 0:
+                # 這天下雨在 lake
+                if lake in full:
+                    # 該湖已經滿水 -> 洪水
+                    return []
 
+                full.add(lake)  # 設為滿水
+                future[lake].pop(0)  # 移除這次的下雨日
+                # 如果未來還會再下雨，就把「下一次下雨的日子」放進 heap
+                if future[lake]:
+                    next_day = future[lake][0]
+                    heapq.heappush(heap, (next_day, lake))
+            else:
+                # 這天是晴天，可以乾一個湖
+                if heap:
+                    # 選擇「最早會再下雨」的湖乾掉
+                    next_day, dry_lake = heapq.heappop(heap)
+                    ans[day] = dry_lake
+                    full.remove(dry_lake)
+                else:
+                    # 若沒有需要乾的湖，就乾個不存在的湖（題目允許）
+                    ans[day] = 1  # 乾哪個都行
+
+        return ans
           </span>
     </div>
 
@@ -293,50 +359,23 @@ class Solution:
       <button class="copy-button" onclick="copyCode(this)">複製</button>
       <span class="code-content">
 sol = Solution()
-print(sol.maxBottlesDrunk(13, 6))  # 15
-print(sol.maxBottlesDrunk(10, 3)) # 13
-print(sol.maxBottlesDrunk(3, 1))  # 5
-          </span>
-    </div>
 
-    <h3>更版</h3>
-    &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
-      <button class="copy-button" onclick="copyCode(this)">複製</button>
-      <span class="code-content">
-class Solution:
-    def maxBottlesDrunk(self, numBottles: int, numExchange: int) -> int:
-        drank = numBottles
-        empty = numBottles
+print(sol.avoidFlood([1,2,3,4]))
+# [-1,-1,-1,-1]
 
-        while empty >= numExchange:
-            # 換到一瓶新水
-            empty -= numExchange
-            numExchange += 1
-            empty += 1
-            drank += 1
+print(sol.avoidFlood([1,2,0,0,2,1]))
+# 可能輸出 [-1,-1,2,1,-1,-1] 或 [-1,-1,1,2,-1,-1]
 
-        return drank
-
-          </span>
-    </div>
-
-    <h3>優化版</h3>
-    &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
-      <button class="copy-button" onclick="copyCode(this)">複製</button>
-      <span class="code-content">
-class Solution:
-    def maxBottlesDrunk(self, numBottles: int, numExchange: int) -> int:
-        drank, empty = numBottles, numBottles
-        while empty >= numExchange:
-            drank, empty, numExchange = drank + 1, empty - numExchange + 1, numExchange + 1
-        return drank
+print(sol.avoidFlood([1,2,0,1,2]))
+# []
 
           </span>
     </div>
 
     <h3>Explanation</h3>
-    
-    <a href="https://chatgpt.com/share/68de13c5-9868-8002-a2f1-ddf0c7c51d19">flow</a><br>
+    <img src="img/1488_1.png" alt="無法顯示" width="1000" class="center-img">
+    <img src="img/1488_2.png" alt="無法顯示" width="1000" class="center-img">
+    <a href="https://chatgpt.com/share/68e4854a-ad34-8002-8119-60875fcddb96">解釋題意</a><br>
 
     <script>
         function copyCode(button) {
