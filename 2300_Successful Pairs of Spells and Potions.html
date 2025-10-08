@@ -290,25 +290,7 @@ class Solution:
           </span>
     </div>
 
-  &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
-      <button class="copy-button" onclick="copyCode(this)">複製</button>
-      <span class="code-content">
-#此為O(n × m)，容易time out
-class Solution:
-    def successfulPairs(self, spells: List[int], potions: List[int], success: int) -> List[int]:
-        n= len(spells)
-        nums= []
-        result= []
-        cnt = 0
-        for i in range(n):
-            cnt = 0
-            for j in range(len(potions)):
-                if spells[i] * potions[j] >= success:
-                    cnt += 1
-            result.append(cnt)
-        return result
-          </span>
-    </div>
+<h3>優化版</h3>
 
   &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
       <button class="copy-button" onclick="copyCode(this)">複製</button>
