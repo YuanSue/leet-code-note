@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>Leet code note</title>
+  
+  <!-- 字型與樣式 -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      margin: 30px;
+      color: #222;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    h2 {
+      font-weight: 700;
+      font-size: 1.5em;
+      color: #975;
+      margin-top: 40px;
+    }
+
+    .under{
+      text-decoration: underline;
+      text-decoration-color: black;
+    }
+
+    .red-text {
+      font-weight: bold;
+      text-decoration-thickness: 2px;
+      color: red;
+    }
+
+    .blue-text {
+      font-weight: bold;
+      text-decoration-thickness: 2px;
+      color: rgb(105, 135, 190);
+    }
+
+    /* 表格樣式 */
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      text-align: center;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+    }
+
+    th {
+      background-color: #f5f5f5;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    code {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: #f2f2f2;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+
+    /* 程式碼框選格式 */
+    .code-block {
+      position: relative;
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 1rem;
+      border-radius: 10px;
+      border: 3px solid #000000;
+      font-family: 'Courier New', monospace;
+      line-height: 1.5;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .copy-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .copy-button:hover {
+      background-color: #45a049;
+    }
+
+    /* 索引面板樣式 */
+    .index-panel {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .index-toggle {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      font-size: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .index-toggle:hover {
+      background-color: #0056b3;
+      transform: scale(1.1);
+    }
+
+    .index-menu {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background: white;
+      border: 2px solid #007bff;
+      border-radius: 10px;
+      padding: 15px;
+      min-width: 250px;
+      max-height: 400px;
+      overflow-y: auto;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      display: none;
+    }
+
+    .index-menu.show {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .index-item {
+      display: block;
+      text-decoration: none;
+      color: #333;
+      padding: 8px 12px;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      transition: background-color 0.2s ease;
+    }
+
+    .index-item:hover {
+      background-color: #f0f8ff;
+      color: #007bff;
+    }
+
+    .index-title {
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 10px;
+      text-align: center;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 8px;
+    }
+
+    /*圖片置中*/
+    .center-img {
+    display: block;
+    margin: 0 auto;
+  }
+  /*樹狀圖調整樣式*/
+  .tree-block {
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      background-color: #f9f9f9;
+      color: #333;
+      border-left: 4px solid #4e73df;
+      padding: 12px 16px;
+      margin: 16px 0;
+      white-space: pre;
+      line-height: 1.6;
+      tab-size: 4; /* 支援 tab 縮排 */
+    }
+
+    .tree-block .blue-text {
+      color: #007acc;
+      font-weight: bold;
+    }
+
+    .tree-block .gray-text {
+      color: #888;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- 索引面板 -->
+  <div class="index-panel">
+    <button class="index-toggle" onclick="toggleIndex()">🔍</button>
+    <div class="index-menu" id="indexMenu">
+      <div class="index-title">頁面索引</div>
+      <a href="#section1" class="index-item">Question</a>
+      <a href="#section2" class="index-item">Tips</a>
+      <a href="#section3" class="index-item">Answer</a>
+    </div>
+  </div>
+
+  <h1><a href="index.html"> Successful Pairs of Spells and Potions</a></h1>
+  <h2 id="section1">Question</h2>
+  <p>You are given two positive integer arrays spells and potions, of length n and m respectively, where spells[i] represents the strength of the ith spell and potions[j] represents the strength of the jth potion.<br>
+    You are also given an integer success. A spell and potion pair is considered successful if the product of their strengths is at least success.<br>
+    Return an integer array pairs of length n where pairs[i] is the number of potions that will form a successful pair with the ith spell.
+    </p>
+    <ol>
+        <li>Example 1:</li>
+        Input: spells = [5,1,3], potions = [1,2,3,4,5], success = 7
+        Output: [4,0,3]
+        Explanation:
+        - 0th spell: 5 * [1,2,3,4,5] = [5,10,15,20,25]. 4 pairs are successful.
+        - 1st spell: 1 * [1,2,3,4,5] = [1,2,3,4,5]. 0 pairs are successful.
+        - 2nd spell: 3 * [1,2,3,4,5] = [3,6,9,12,15]. 3 pairs are successful.
+        Thus, [4,0,3] is returned.
+
+        <li>Example 2:</li>
+        Input: spells = [3,1,2], potions = [8,5,8], success = 16
+        Output: [2,0,2]
+        Explanation:
+        - 0th spell: 3 * [8,5,8] = [24,15,24]. 2 pairs are successful.
+        - 1st spell: 1 * [8,5,8] = [8,5,8]. 0 pairs are successful. 
+        - 2nd spell: 2 * [8,5,8] = [16,10,16]. 2 pairs are successful. 
+        Thus, [2,0,2] is returned.
+        
+    </ol>
+
+  <h2 id="section2">Tips</h2>
+    <ol>
+        重點 -> 一組「法術(spells[i]：法術強度) × 藥水(potions[j]：藥水強度)」的乘積要 ≥ success 才算成功。
+        <ul>
+            要回傳每個 spell 能搭配幾個 potions 成功:
+            <li>用兩個for迴圈是能跑得出來，但時間複雜度為:O(n × m)（n 為 spells 數量、m 為 potions 數量），當輸入變大時（例如兩者各 10⁵），就會 Time Limit Exceeded (TLE)。</li>
+        
+            <li>由於我們只關心「有多少個 potions 讓乘積 ≥ success」，可以用 排序 + 二分搜尋 (binary search) 來加速。</li>
+                <ul>
+                    <li>先將 potions 排序</li>
+                    <li>對於每個 spell：</li>
+                    <li>計算最小需要的藥水值 minPotion = ceil(success / spell)</li>
+                    <li>用 二分搜尋 找出第一個 >= minPotion 的位置</li>
+                    <li>計算符合的個數 = len(potions) - index</li>
+                </ul>
+                這樣時間複雜度就變成 O(n log m)，能輕鬆通過。
+        </ul>
+    </ol>
+
+  <h2 id="section3">Answer</h2>
+  &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
+      <button class="copy-button" onclick="copyCode(this)">複製</button>
+      <span class="code-content">
+#此為O(n × m)，容易time out
+class Solution:
+    def successfulPairs(self, spells: List[int], potions: List[int], success: int) -> List[int]:
+        n= len(spells)
+        nums= []
+        result= []
+        cnt = 0
+        for i in range(n):
+            cnt = 0
+            for j in range(len(potions)):
+                if spells[i] * potions[j] >= success:
+                    cnt += 1
+            result.append(cnt)
+        return result
+          </span>
+    </div>
+
+  &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
+      <button class="copy-button" onclick="copyCode(this)">複製</button>
+      <span class="code-content">
+#此為O(n × m)，容易time out
+class Solution:
+    def successfulPairs(self, spells: List[int], potions: List[int], success: int) -> List[int]:
+        n= len(spells)
+        nums= []
+        result= []
+        cnt = 0
+        for i in range(n):
+            cnt = 0
+            for j in range(len(potions)):
+                if spells[i] * potions[j] >= success:
+                    cnt += 1
+            result.append(cnt)
+        return result
+          </span>
+    </div>
+
+  &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
+      <button class="copy-button" onclick="copyCode(this)">複製</button>
+      <span class="code-content">
+from bisect import bisect_left
+import math
+
+class Solution:
+    def successfulPairs(self, spells, potions, success):
+        potions.sort()
+        m = len(potions)
+        res = []
+
+        for spell in spells:
+            # 找到最小的 potion，使 spell * potion >= success =>  potion >= success / spell
+            minPotion = math.ceil(success / spell)
+            idx = bisect_left(potions, minPotion)
+            res.append(m - idx)  # 剩下的 potions 都符合條件
+
+        return res
+          </span>
+    </div>
+
+    <h3>執行範例</h3>
+    &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
+      <button class="copy-button" onclick="copyCode(this)">複製</button>
+      <span class="code-content">
+spells = [5, 1, 3]
+potions = [1, 2, 3, 4, 5]
+success = 7
+
+sol = Solution()
+print(sol.successfulPairs(spells, potions, success))
+          </span>
+    </div>
+
+    <h3>Explanation</h3>
+    <ol>
+        <li>for spell in spells:</li>
+        依序檢查每一個法術。
+        <li>minPotion = math.ceil(success / spell)</li>
+        這行是「反推」需要的最小藥水強度。因為要成功：
+        <code>spell * potion >= success</code>→ 
+        <code>potion >= success / spell</code>
+        但藥水是整數，所以要「向上取整」(ceil)。這樣才確保乘出來的結果一定 ≥ success。
+        <li>idx = bisect_left(potions, minPotion)</li>
+        bisect_left 是 二分搜尋，它會在排序好的 potions 裡找到 第一個 ≥ minPotion 的位置。
+        e.g.
+        <code>potions = [1, 2, 3, 5, 8]</code>
+        <code>minPotion = 4</code>
+        <code>bisect_left(potions, 4)</code>→ 3  # potions[3] = 5 是第一個 ≥ 4
+
+        <li>res.append(m - idx)</li>
+        m 是 potions 的總長度。
+        m - idx 就代表「從 idx 開始到最後」有多少個 potions 能成功。
+        e.g.
+        <code>m = 5, idx = 3</code>
+        → 成功的 potions 數 = 5 - 3 = 2
+
+    </ol>
+
+    <script>
+        function copyCode(button) {
+          // 找到按鈕所在的程式碼區塊
+          const codeBlock = button.parentElement;
+          // 找到程式碼內容元素
+          const codeContent = codeBlock.querySelector('.code-content');
+
+          if (codeContent) {
+            navigator.clipboard.writeText(codeContent.textContent).then(() => {
+              alert("已複製 SQL 程式碼！");
+            });
+          }
+        }
+
+        function toggleIndex() {
+          const indexMenu = document.getElementById('indexMenu');
+          indexMenu.classList.toggle('show');
+        }
+
+        // 點擊其他地方時關閉索引面板
+        document.addEventListener('click', function(event) {
+          const indexPanel = document.querySelector('.index-panel');
+          const indexMenu = document.getElementById('indexMenu');
+
+          if (!indexPanel.contains(event.target)) {
+            indexMenu.classList.remove('show');
+          }
+        });
+
+        // 點擊索引項目後關閉面板並平滑滾動
+        document.querySelectorAll('.index-item').forEach(item => {
+          item.addEventListener('click', function(event) {
+            event.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+              targetElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+
+            // 關閉索引面板
+            document.getElementById('indexMenu').classList.remove('show');
+          });
+        });
+
+        // 對所有 <code> 元素監聽右鍵
+        document.querySelectorAll('code').forEach(el => {
+          el.addEventListener('contextmenu', function (event) {
+            event.preventDefault();// 阻止預設右鍵選單
+            const codeText = this.innerText.trim();
+            navigator.clipboard.writeText(codeText)
+              .catch(err => console.error('複製失敗', err));
+          });
+        });
+    </script>
+
+    <a href="index.html">← 回首頁</a>
+</body>
+</html>
