@@ -332,12 +332,12 @@ print(sol.successfulPairs(spells, potions, success))
         <li>for spell in spells:</li>
         依序檢查每一個法術。
         <li>minPotion = math.ceil(success / spell)</li>
-        這行是「反推」需要的最小藥水強度。因為要成功：
+        這行是「反推」需要的最小藥水強度。因為要成功：<br>
         <code>spell * potion >= success</code>→ 
         <code>potion >= success / spell</code>
         但藥水是整數，所以要「向上取整」(ceil)。這樣才確保乘出來的結果一定 ≥ success。
         <li>idx = bisect_left(potions, minPotion)</li>
-        bisect_left 是 二分搜尋，它會在排序好的 potions 裡找到 第一個 ≥ minPotion 的位置。
+        bisect_left 是 二分搜尋，它會在排序好的 potions 裡找到 第一個 ≥ minPotion 的位置。<br>
         e.g.
         <code>potions = [1, 2, 3, 5, 8]</code>
         <code>minPotion = 4</code>
@@ -345,7 +345,7 @@ print(sol.successfulPairs(spells, potions, success))
 
         <li>res.append(m - idx)</li>
         m 是 potions 的總長度。
-        m - idx 就代表「從 idx 開始到最後」有多少個 potions 能成功。
+        m - idx 就代表「從 idx 開始到最後」有多少個 potions 能成功。<br>
         e.g.
         <code>m = 5, idx = 3</code>
         → 成功的 potions 數 = 5 - 3 = 2
